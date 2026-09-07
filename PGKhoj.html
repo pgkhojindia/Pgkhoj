@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PGKhoj — हर PG की जानकारी एक जगह</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}
+header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:800}.owner{background:white;color:#4f46e5;border:0;padding:10px 15px;border-radius:10px;font-weight:700}
+.hero{padding:55px 6%;text-align:center;background:white}.hero h1{font-size:38px;margin:10px}.hero p{color:#667085;font-size:17px}
+.search{max-width:1000px;margin:25px auto 0;padding:18px;background:#fff;border-radius:16px;box-shadow:0 8px 30px #00000012;display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:10px}
+input,select{padding:13px;border:1px solid #ddd;border-radius:10px;background:#fff}.search button{background:#4f46e5;color:#fff;border:0;border-radius:10px;padding:13px 20px;font-weight:700}
+.tabs{display:flex;gap:10px;justify-content:center;margin:28px 0}.tab{padding:10px 18px;border-radius:22px;border:1px solid #ddd;background:white;cursor:pointer}.tab.active{background:#4f46e5;color:white;border-color:#4f46e5}
+main{padding:10px 6% 50px;max-width:1200px;margin:auto}.title{display:flex;justify-content:space-between;align-items:center}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 5px 20px #0000000d}.pic{height:175px;background:linear-gradient(135deg,#ddd,#bbb);display:flex;align-items:center;justify-content:center;font-size:45px}
+.content{padding:16px}.content h3{margin:0 0 7px}.muted{color:#667085;font-size:14px}.price{font-size:20px;font-weight:800;color:#4f46e5;margin:10px 0}.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{background:#eef2ff;color:#3730a3;padding:6px 8px;border-radius:8px;font-size:12px}.actions{display:flex;gap:8px;margin-top:14px}.actions button{flex:1;padding:10px;border-radius:9px;border:1px solid #ddd;background:white}.actions .primary{background:#4f46e5;color:white;border-color:#4f46e5}
+footer{text-align:center;padding:25px;background:#111827;color:#cbd5e1}
+@media(max-width:800px){.search{grid-template-columns:1fr 1fr}.search button{grid-column:1/-1}.grid{grid-template-columns:1fr}.hero h1{font-size:30px}}
+</style>
+</head>
+<body>
+<header><div class="logo">🏠 PGKhoj</div><button class="owner" onclick="openOwner()">+ अपना PG जोड़ें</button></header>
+
+<section class="hero">
+<h1>हर PG की जानकारी, एक ही जगह</h1>
+<p>शहर, एरिया, बजट और सुविधा के हिसाब से PG खोजें।</p>
+<div class="search">
+<input id="city" placeholder="📍 शहर (जैसे Jaipur)">
+<input id="area" placeholder="📌 Area">
+<select id="type"><option value="">Boys / Girls</option><option>Boys</option><option>Girls</option></select>
+<select id="kind"><option value="">Government / Private</option><option>Government</option><option>Private</option></select>
+<button onclick="searchPG()">PG खोजें</button>
+</div>
+<div class="tabs">
+<button class="tab active" onclick="filterKind('')">सभी</button>
+<button class="tab" onclick="filterKind('Government')">🏛️ Government</button>
+<button class="tab" onclick="filterKind('Private')">🏠 Private</button>
+</div>
+</section>
+
+<main>
+<div class="title"><h2>लोकप्रिय PG</h2><span id="count" class="muted"></span></div>
+<div id="results" class="grid"></div>
+</main>
+
+
+<section id="ownerPanel" style="display:none;position:fixed;inset:0;background:#0008;z-index:10;padding:20px;overflow:auto">
+<div style="max-width:600px;margin:30px auto;background:white;border-radius:18px;padding:24px">
+<h2>➕ अपना PG जोड़ें</h2>
+<p class="muted">यह demo form है। Live website में submission admin approval के बाद दिखेगा।</p>
+<input id="pgName" placeholder="PG का नाम" style="width:100%;margin:6px 0">
+<input id="pgCity" placeholder="शहर" style="width:100%;margin:6px 0">
+<input id="pgArea" placeholder="Area" style="width:100%;margin:6px 0">
+<input id="pgRent" type="number" placeholder="Monthly rent ₹" style="width:100%;margin:6px 0">
+<select id="pgType" style="width:100%;margin:6px 0"><option>Boys</option><option>Girls</option></select>
+<select id="pgKind" style="width:100%;margin:6px 0"><option>Private</option><option>Government</option></select>
+<input id="pgFacilities" placeholder="Facilities: Wi-Fi, Food, AC" style="width:100%;margin:6px 0">
+<input id="pgPhone" placeholder="Owner mobile" style="width:100%;margin:6px 0">
+<div class="actions"><button onclick="closeOwner()">Cancel</button><button class="primary" onclick="submitPG()">Submit Listing</button></div>
+</div></section>
+
+<section style="background:#eef2ff;padding:35px 6%;text-align:center">
+<h2>🚀 PG मालिकों के लिए</h2>
+<p>अपना PG जोड़ें और हजारों students/working लोगों तक पहुँचें।</p>
+<button class="search" style="display:inline-block;background:#4f46e5;color:white;padding:12px 20px;border:0;border-radius:10px;cursor:pointer" onclick="openOwner()">Free में PG जोड़ें</button>
+</section>
+
+<section style="padding:35px 6%;background:white">
+<h2 style="text-align:center">💰 Premium Promotion</h2>
+<div class="grid" style="max-width:1000px;margin:auto">
+<div class="card"><div class="content"><h3>Basic</h3><div class="price">Free</div><p class="muted">Basic listing और contact.</p></div></div>
+<div class="card"><div class="content"><h3>Featured</h3><div class="price">₹299/month</div><p class="muted">Search में ऊपर दिखें + ज्यादा visibility.</p></div></div>
+<div class="card"><div class="content"><h3>Premium</h3><div class="price">₹599/month</div><p class="muted">Photos/video + Verified badge + priority placement.</p></div></div>
+</div>
+</section>
+<footer>© 2026 PGKhoj • हर PG की जानकारी एक जगह</footer>
+
+<script>
+const data=[
+{name:"Sharma Boys PG",city:"Jaipur",area:"Mansarovar",type:"Boys",kind:"Private",rent:4500,fac:["Wi‑Fi","Food","Attached Bath"],rating:"4.4"},
+{name:"Student Home PG",city:"Kota",area:"Talwandi",type:"Boys",kind:"Private",rent:5500,fac:["Wi‑Fi","AC","Laundry"],rating:"4.6"},
+{name:"Govt. Girls Hostel",city:"Jaipur",area:"Gandhi Nagar",type:"Girls",kind:"Government",rent:2500,fac:["Mess","Security","Study Room"],rating:"4.3"},
+{name:"Pink City Girls PG",city:"Jaipur",area:"Vaishali Nagar",type:"Girls",kind:"Private",rent:5000,fac:["Wi‑Fi","Food","Parking"],rating:"4.5"},
+{name:"Kota Student Residence",city:"Kota",area:"Vigyan Nagar",type:"Boys",kind:"Private",rent:6000,fac:["Wi‑Fi","Mess","AC"],rating:"4.7"},
+{name:"Govt. Working Hostel",city:"Delhi",area:"Lajpat Nagar",type:"Girls",kind:"Government",rent:3000,fac:["Security","Food","Laundry"],rating:"4.2"}
+];
+let currentKind="";
+function render(list=data){
+const box=document.getElementById("results");
+box.innerHTML=list.map(x=>`<article class="card">
+<div class="pic">🏠</div><div class="content">
+<h3>${x.name} ${x.kind==="Government"?"🏛️":"🏠"}</h3>
+<div class="muted">📍 ${x.area}, ${x.city} • ${x.type}</div>
+<div class="price">₹${x.rent.toLocaleString("en-IN")} / month</div>
+<div>⭐ ${x.rating} <span class="muted">• ${x.kind}</span></div>
+<div class="chips">${x.fac.map(f=>`<span class="chip">${f}</span>`).join("")}</div>
+<div class="actions"><button onclick="alert('PG details अगले version में आएंगे।')">Details</button><button class="primary" onclick="alert('Owner contact अगले version में आएगा।')">Contact</button></div>
+</div></article>`).join("");
+document.getElementById("count").textContent=list.length+" PG मिले";
+}
+function searchPG(){
+const city=document.getElementById("city").value.toLowerCase();
+const area=document.getElementById("area").value.toLowerCase();
+const type=document.getElementById("type").value;
+const kind=document.getElementById("kind").value;
+render(data.filter(x=>(!city||x.city.toLowerCase().includes(city))&&(!area||x.area.toLowerCase().includes(area))&&(!type||x.type===type)&&(!kind||x.kind===kind)&&(!currentKind||x.kind===currentKind)));
+}
+function filterKind(k){currentKind=k;document.getElementById("kind").value=k;searchPG();}
+render();
+
+function openOwner(){document.getElementById("ownerPanel").style.display="block"}
+function closeOwner(){document.getElementById("ownerPanel").style.display="none"}
+function submitPG(){
+ const n=document.getElementById("pgName").value.trim();
+ const c=document.getElementById("pgCity").value.trim();
+ const a=document.getElementById("pgArea").value.trim();
+ const r=Number(document.getElementById("pgRent").value);
+ if(!n||!c||!a||!r){alert("कृपया PG नाम, शहर, Area और rent भरें।");return}
+ alert("Listing submit हो गई! Demo में यह admin approval के लिए भेजी गई है.");
+ closeOwner();
+}
+</script>
+</body>
+</html>
